@@ -1,0 +1,31 @@
+# docker-compose.scouter.yml
+version: '3.2'
+
+services:
+  scouter:
+    image: scouterapm/scouter-server:2.17.1
+    container_name: scouter-server
+    environment:
+      - SC_SERVER_ID=SCOUTER-COLLECTOR
+      - NET_HTTP_SERVER_ENABLED=true
+      - NET_HTTP_API_SWAGGER_ENABLED=true
+      - NET_HTTP_API_ENABLED=true
+      - MGR_PURGE_PROFILE_KEEP_DAYS=2
+      - MGR_PURGE_XLOG_KEEP_DAYS=5
+      - MGR_PURGE_COUNTER_KEEP_DAYS=15
+      - JAVA_OPT=-Xms512m -Xmx512m
+    volumes:
+      - ./scouter-logs:/home/scouter-server/logs
+      - ./scouter-data:/home/scouter-server/database
+    ports:
+      - "6188:6188"
+      - "6180:6180"
+      - "6100:6100"
+      - "6100:6100/udp"
+
+  paper:
+    image: scouterapm/scouter-paper:2.6.5-snapshot
+    container_name: scouter-paper
+    restart: always
+    ports:
+      - "8080:80"

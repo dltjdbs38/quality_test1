@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+server.log
+npm-debug.log*
+
+# Environment variables
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# JMeter 결과물 (필요하면 이 아래 줄들은 지워도 됩니다)
+*.jtl
+report_*/
