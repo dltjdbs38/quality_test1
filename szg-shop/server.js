@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // 첫번째 미들웨어
+app.use(express.json()); // 두번쨰 미들웨어 - 요청에서 JSON으로 req.body 파싱
 
 const SECRET = 'szg-shop-secret-key';
 const PORT = process.env.PORT || 3000;
@@ -99,15 +99,15 @@ app.get('/api/products/:id', (req, res) => {
 });
 
 // ---- 장바구니 담기 ----
-app.post('/api/cart', authenticate, (req, res) => {
+app.post('/api/cart', authenticate, (req, res) => { // authenticate 미들웨어 먼저 통과
   const { productId, qty } = req.body;
   const product = products.find((p) => p.id === productId);
   if (!product) return res.status(404).json({ error: 'product not found' });
 
-  const cart = carts.get(req.user) || [];
+  const cart = carts.get(req.user) || []; // ③ 이 유저의 기존 장바구니 꺼내기 (없으면 빈 배열)
   cart.push({ productId, qty: qty || 1 });
   carts.set(req.user, cart);
-  res.json({ cart });
+  res.json({ cart }); // ⑥ 최종 장바구니 응답
 });
 
 // ---- 장바구니 조회 ----

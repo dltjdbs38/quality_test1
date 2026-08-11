@@ -1,0 +1,11 @@
+# Scouter 사용법
+docker compose -f docker-compose.scouter.yml up -d
+
+Scouter 웹 UI(Paper): http://localhost:8080
+Server(Collector) 포트: 6100 (Agent가 여기로 데이터를 보냄)
+
+
+
+# szg-shop 테스트
+szg-shop 유저 토큰1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE3ODYyNzI4NTksImV4cCI6MTc4NjI3NjQ1OX0.M8i4MSZbBvD80Ul3-iW7avAc46CLsmxlyL8aVu1_uhM
+
