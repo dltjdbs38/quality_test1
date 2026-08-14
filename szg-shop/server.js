@@ -30,21 +30,21 @@ const waitQueue = [];
 function acquireConnection() {
   return new Promise((resolve) => {
     const tryAcquire = () => {
-      if (activeConnections < MAX_POOL) {
-        activeConnections++;
+      if (activeConnections < MAX_POOL) {   // 풀에 자리 있으면 바로 통과
+        activeConnections++; 
         resolve();
       } else {
-        waitQueue.push(tryAcquire);
+        waitQueue.push(tryAcquire);  // 자리 없으면 대기열에 등록
       }
     };
     tryAcquire();
   });
 }
 
-function releaseConnection() {
+function releaseConnection() { // 자리 반납 + 대기자 깨우기
   activeConnections--;
-  const next = waitQueue.shift();
-  if (next) next();
+  const next = waitQueue.shift(); // 대기열 맨 앞 사람
+  if (next) next(); // 그 사람한테 자리 넘겨주기
 }
 
 // ---- JWT 인증 미들웨어 ----
@@ -133,8 +133,8 @@ app.post('/api/orders', authenticate, async (req, res) => {
       total,
       processedMs: Date.now() - start,
     });
-  } finally {
-    releaseConnection();
+  } finally { // 왜 finally인가 : 함수가 죽어버리면 영원히 반납이 안됨(커넥션 누수) -> 에러나도 무조건 자리 반납
+    releaseConnection(); 
   }
 });
 
