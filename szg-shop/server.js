@@ -118,7 +118,16 @@ app.get('/api/cart', authenticate, (req, res) => {
 // ---- 주문(결제) - 커넥션 풀 병목이 걸리는 구간 ----
 app.post('/api/orders', authenticate, async (req, res) => {
   const start = Date.now();
-  await acquireConnection();
+
+  // ① 커넥션 획득 시도 - 여기서 타임아웃(POOL_TIMEOUT_MS) 넘으면 reject됨
+  try {
+    await acquireConnection();
+  } catch (e) {
+    // 풀 자리를 끝내 못 받은 경우 -> 503으로 응답하고 여기서 함수 종료
+    return res.status(503).json({ error: 'server busy, connection pool exhausted' });
+  }
+
+  // ② 여기부턴 커넥션을 정상적으로 받은 상태라, releaseConnection()을 무조건 보장해야 함
   try {
     // DB 처리 시간 시뮬레이션 (50~150ms)
     await new Promise((r) => setTimeout(r, 50 + Math.random() * 100));
@@ -133,8 +142,8 @@ app.post('/api/orders', authenticate, async (req, res) => {
       total,
       processedMs: Date.now() - start,
     });
-  } finally { // 왜 finally인가 : 함수가 죽어버리면 영원히 반납이 안됨(커넥션 누수) -> 에러나도 무조건 자리 반납
-    releaseConnection(); 
+  } finally {
+    releaseConnection();
   }
 });
 

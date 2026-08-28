@@ -14,7 +14,11 @@ szg-shop 유저 토큰1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6I
 1. case1 : 풀 크기 이하(5) - Thread 5명, Loop 5회, 요청 4개
 "C:\Users\aiais\Downloads\apache-jmeter-5.6.3\bin\jmeter.bat" -n -t szg_shopping.jmx -l result_case1.jtl -e -o report_case1/
    여기서 요청 4개란? 
+1-1. case3 : Thread 30, Rampup 1, Loop 5 (Rampup 1로해서 동시투입 - 점점 Thoughput과 95th가 증가함. )
+"C:\Users\aiais\Downloads\apache-jmeter-5.6.3\bin\jmeter.bat" -n -t szg_shopping.jmx -l result_case1_1.jtl -e -o report_case1_1/
 
 2. case2 : 04_order의 풀 크기 이상(15 > 8) -> case1 하고 .jmx  수정 필요.
 "C:\Users\aiais\Downloads\apache-jmeter-5.6.3\bin\jmeter.bat" -n -t szg_shopping.jmx -l result_case2.jtl -e -o report_case2/
 
+3. case4 : 60, 1, 5  ("최종 병목구간 확인" = 진짜 에러가 나는 지점 찾기)
+"C:\Users\aiais\Downloads\apache-jmeter-5.6.3\bin\jmeter.bat" -n -t szg_shopping.jmx -l result_case3.jtl -e -o report_case3/
